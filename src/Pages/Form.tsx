@@ -22,6 +22,7 @@ const Form = () => {
 
   bc.onmessage = (messageEvent) => {
     if (messageEvent.data === username) {
+      // where should username come from? which storage
       setIsBroadCasted(true);
     } else setIsBroadCasted(false);
   }; // checks if the broadcasted message is the username
@@ -44,20 +45,22 @@ const Form = () => {
     }
   };
 
-  const allUsers = [
-    {
-      username: "",
-      active: false,
-    },
-  ];
+  const updateUsers = () => {
+    if (localStorage.getItem("usersList")) {
+      const currentList = JSON.parse(localStorage.getItem("usersList") || "[]");
+      currentList.push({ useranme: username, active: true });
+      localStorage.setItem("usersList", JSON.stringify(currentList));
+    } else {
+      const list = [{ usenanme: username, active: true }];
+      localStorage.setItem("usersList", JSON.stringify(list));
+    }
+  };
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     localStorage.setItem("user", username);
     sessionStorage.setItem("user", username);
-    allUsers.push({ username: username, active: true });
-    localStorage.setItem("usersList", JSON.stringify(allUsers));
-
+    updateUsers();
     navigate("/userboard");
   };
 
