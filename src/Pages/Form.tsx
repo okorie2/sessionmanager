@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { ButtonHighlight, FormContainer, Input } from "../Styles/Form";
+import {
+  ButtonContainer,
+  ButtonHighlight,
+  FormContainer,
+  Input,
+  InputContainer,
+} from "../Styles/Form";
 import { useNavigate } from "react-router-dom";
 import { getLoggedinUser } from "../Utils/getLoggedInUser";
 import { getLoggedInUserList } from "../Utils/getLoggedInUserList";
@@ -61,16 +67,18 @@ const Form = () => {
 
   return (
     <FormContainer>
-      <div>
+      <InputContainer>
         <Input
           type="text"
           placeholder="enter username"
           onChange={(e) => setUsername(e.target.value.toLocaleLowerCase())}
         />
-      </div>
-      <ButtonHighlight type="submit" onClick={() => handleSubmit()}>
-        submit
-      </ButtonHighlight>
+      </InputContainer>
+      <ButtonContainer>
+        <ButtonHighlight type="submit" onClick={() => handleSubmit()}>
+          submit
+        </ButtonHighlight>
+      </ButtonContainer>
     </FormContainer>
   );
 };

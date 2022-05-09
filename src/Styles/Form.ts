@@ -9,22 +9,31 @@ export const FormContainer = styled.div`
   margin-top: 10%;
   border: 1px solid #4ab5e1;
 `;
-export const Input = styled.input`
+export const InputContainer = styled.div`
   width: 70%;
+  margin: auto;
+`;
+
+export const Input = styled.input`
+  width: 94%;
   padding: 3%;
   border-radius: 5px;
   outline: none;
-  margin-left: 15%;
   margin-top: 25%;
   border: 2px solid #4ab5e1;
+`;
+
+export const ButtonContainer = styled.div`
+  margin: auto;
+  margin-top: 5%;
+  width: max-content;
 `;
 export const ButtonHighlight = styled.button`
   background-color: #4ab5e1;
   padding: 18px 45px;
   border-radius: 7px;
   border: none;
-  margin-left: 40%;
-  margin-top: 5%;
+
   color: white;
   cursor: pointer;
 `;

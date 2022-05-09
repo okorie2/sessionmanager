@@ -13,6 +13,7 @@ export const Nav = styled.div`
   svg {
     height: 40px;
     width: 40px;
+    cursor: pointer;
   }
 `;
 export const TCont = styled.div`

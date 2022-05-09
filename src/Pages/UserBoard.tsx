@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { ButtonHighlight } from "../Styles/Form";
+import { ButtonContainer, ButtonHighlight } from "../Styles/Form";
 import { Nav, TCont } from "../Styles/UserBoard";
 import { getLoggedInUserList, UsersStatus } from "../Utils/getLoggedInUserList";
 import { getLoggedinUser } from "../Utils/getLoggedInUser";
@@ -13,6 +13,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Button } from "@mui/material";
+import { getIndexOfLoggedInUser } from "../Utils/getIndexOfLoggedInUser";
 
 export default function UserBoard() {
   const navigate = useNavigate();
@@ -42,9 +43,7 @@ export default function UserBoard() {
 
   const logout = () => {
     const loggedInUsers = getLoggedInUserList();
-    const indexOfLoggedInUser = loggedInUsers.findIndex(
-      (user) => user.userName === username
-    ); //finds the position/index of the users from userslist that matches with the windowname
+    const indexOfLoggedInUser = getIndexOfLoggedInUser(username);
     if (indexOfLoggedInUser < 0) {
       return;
     }
@@ -82,9 +81,10 @@ export default function UserBoard() {
 
   const handleInactivity = () => {
     const loggedInUsers = getLoggedInUserList();
-    const indexOfLoggedInUser = loggedInUsers.findIndex(
-      (user) => user.userName === username
-    );
+    const indexOfLoggedInUser = getIndexOfLoggedInUser(username);
+    if (indexOfLoggedInUser < 0) {
+      return;
+    }
     loggedInUsers[indexOfLoggedInUser].status = "Idle";
     localStorage.setItem("loggedInUsers", JSON.stringify(loggedInUsers)); // sets the modified userslist to LS
 
@@ -93,9 +93,10 @@ export default function UserBoard() {
 
   const handleActivity = () => {
     const loggedInUsers = getLoggedInUserList();
-    const indexOfLoggedInUser = loggedInUsers.findIndex(
-      (user) => user.userName === username
-    );
+    const indexOfLoggedInUser = getIndexOfLoggedInUser(username);
+    if (indexOfLoggedInUser < 0) {
+      return;
+    }
     loggedInUsers[indexOfLoggedInUser].status = "active";
     localStorage.setItem("loggedInUsers", JSON.stringify(loggedInUsers)); // sets the modified userslist to LS
 
@@ -124,7 +125,7 @@ export default function UserBoard() {
           </svg>
         </div>
       </Nav>
-      <div>
+      <ButtonContainer>
         <ButtonHighlight
           onClick={() => {
             sessionStorage.setItem("previousUser", JSON.stringify(username));
@@ -133,7 +134,7 @@ export default function UserBoard() {
         >
           Login a with another account
         </ButtonHighlight>
-      </div>
+      </ButtonContainer>
       <TCont>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -145,7 +146,7 @@ export default function UserBoard() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {users.map((user: any, index) => (
+              {users.map((user: UsersStatus, index) => (
                 <TableRow
                   key={index}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -155,6 +156,7 @@ export default function UserBoard() {
                   </TableCell>
                   <TableCell align="center">
                     <Button
+                      sx={{ minWidth: "180px" }}
                       variant="contained"
                       color={`${
                         user.status == "active" ? "success" : "warning"
