@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { ButtonHighlight } from "../Styles/Form";
-import { Nav } from "../Styles/UserBoard";
+import { Nav, TCont } from "../Styles/UserBoard";
 import { getLoggedInUserList, UsersStatus } from "../Utils/getLoggedInUserList";
-import { getLoggedinUser } from "../Utils/userIsLoggedIn";
+import { getLoggedinUser } from "../Utils/getLoggedInUser";
+
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import { Button } from "@mui/material";
 
 export default function UserBoard() {
-  // const username = localStorage.getItem("user");
-  // console.log(username);
-
   const navigate = useNavigate();
   const url = window.location.origin;
 
@@ -24,7 +30,6 @@ export default function UserBoard() {
     bc.postMessage(loggedInUsers);
   }, []);
 
-  console.log(users, "usersarray");
   useEffect(() => {
     window.addEventListener("focus", () => {
       if (!username || !getLoggedinUser(username)) navigate("/");
@@ -66,14 +71,14 @@ export default function UserBoard() {
   };
 
   const resetTimer = () => {
-    // handleActivity();
+    handleActivity();
     clearTimeout(sessionTimeout);
-    sessionTimeout = setTimeout(handleInactivity, 10000);
+    sessionTimeout = setTimeout(handleInactivity, 60000);
   };
 
-  window.onload = resetTimer;
   document.onmousemove = resetTimer;
   let sessionTimeout: NodeJS.Timeout;
+  window.onfocus = resetTimer;
 
   const handleInactivity = () => {
     const loggedInUsers = getLoggedInUserList();
@@ -86,19 +91,17 @@ export default function UserBoard() {
     bc.postMessage(loggedInUsers);
   };
 
-  // const handleActivity = () => {
-  //   const loggedInUsers = getLoggedInUserList();
-  //   const indexOfLoggedInUser = loggedInUsers.findIndex(
-  //     (user) => user.userName === username
-  //   );
-  //   if (indexOfLoggedInUser < 0) {
-  //     return;
-  //   }
-  //   loggedInUsers[indexOfLoggedInUser].status = "Active";
-  //   localStorage.setItem("loggedInUsers", JSON.stringify(loggedInUsers)); // sets the modified userslist to LS
+  const handleActivity = () => {
+    const loggedInUsers = getLoggedInUserList();
+    const indexOfLoggedInUser = loggedInUsers.findIndex(
+      (user) => user.userName === username
+    );
+    loggedInUsers[indexOfLoggedInUser].status = "active";
+    localStorage.setItem("loggedInUsers", JSON.stringify(loggedInUsers)); // sets the modified userslist to LS
 
-  //   bc.postMessage(loggedInUsers);
-  // };
+    bc.postMessage(loggedInUsers);
+  };
+
   return (
     <>
       <Nav>
@@ -125,7 +128,7 @@ export default function UserBoard() {
         <ButtonHighlight
           onClick={() => {
             sessionStorage.setItem("previousUser", JSON.stringify(username));
-            window.name = "";
+            // window.name = "";
             window.open(url);
             // navigate("/");
           }}
@@ -133,34 +136,51 @@ export default function UserBoard() {
           Login a with another account
         </ButtonHighlight>
       </div>
-      <div>
-        <table>
-          <thead>
-            <tr>
-              <th>userName</th>
-              <th>status</th>
-              <th>action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user: any, index) => (
-              <tr key={index}>
-                <td>{user.userName}</td>
-                <td>{user.status}</td>
-                <td>
-                  <button
-                    onClick={() =>
-                      logoutUserBroadCast.postMessage(user.userName)
-                    }
-                  >
-                    logout
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <TCont>
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Username</TableCell>
+                <TableCell align="center">Status</TableCell>
+                <TableCell align="center">Action</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {users.map((user: any, index) => (
+                <TableRow
+                  key={index}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    {user.userName}
+                  </TableCell>
+                  <TableCell align="center">
+                    <Button
+                      variant="contained"
+                      color={`${
+                        user.status == "active" ? "success" : "warning"
+                      }`}
+                    >
+                      {user.status}
+                    </Button>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Button
+                      variant="outlined"
+                      onClick={() =>
+                        logoutUserBroadCast.postMessage(user.userName)
+                      }
+                    >
+                      Logout
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </TCont>
     </>
   );
 }

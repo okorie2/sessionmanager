@@ -15,3 +15,8 @@ export const Nav = styled.div`
     width: 40px;
   }
 `;
+export const TCont = styled.div`
+  width: 60%;
+  margin: auto;
+  margin-top: 5%;
+`;

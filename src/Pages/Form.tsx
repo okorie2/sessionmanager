@@ -1,7 +1,7 @@
 import React, { FormEventHandler, useEffect, useState } from "react";
 import { ButtonHighlight, FormContainer, Input } from "../Styles/Form";
 import { useNavigate } from "react-router-dom";
-import { getLoggedinUser } from "../Utils/userIsLoggedIn";
+import { getLoggedinUser } from "../Utils/getLoggedInUser";
 import { getLoggedInUserList } from "../Utils/getLoggedInUserList";
 import { updateUsers } from "../Utils/updateUsers";
 
