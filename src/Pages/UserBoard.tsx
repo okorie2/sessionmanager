@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { ButtonHighlight } from "../Styles/Form";
 import { Nav } from "../Styles/UserBoard";
 import { getLoggedInUserList, UsersStatus } from "../Utils/getLoggedInUserList";
 import { getLoggedinUser } from "../Utils/userIsLoggedIn";
@@ -64,14 +65,15 @@ export default function UserBoard() {
     if (messageEvent.data === username) logout();
   };
 
-  window.onload = resetTimer;
-  document.onmousemove = resetTimer;
-  let sessionTimeout: NodeJS.Timeout;
-  function resetTimer() {
+  const resetTimer = () => {
     // handleActivity();
     clearTimeout(sessionTimeout);
     sessionTimeout = setTimeout(handleInactivity, 10000);
-  }
+  };
+
+  window.onload = resetTimer;
+  document.onmousemove = resetTimer;
+  let sessionTimeout: NodeJS.Timeout;
 
   const handleInactivity = () => {
     const loggedInUsers = getLoggedInUserList();
@@ -120,7 +122,7 @@ export default function UserBoard() {
         </div>
       </Nav>
       <div>
-        <button
+        <ButtonHighlight
           onClick={() => {
             sessionStorage.setItem("previousUser", JSON.stringify(username));
             window.name = "";
@@ -129,7 +131,7 @@ export default function UserBoard() {
           }}
         >
           Login a with another account
-        </button>
+        </ButtonHighlight>
       </div>
       <div>
         <table>
