@@ -1,4 +1,4 @@
-import React, { FormEventHandler, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ButtonHighlight, FormContainer, Input } from "../Styles/Form";
 import { useNavigate } from "react-router-dom";
 import { getLoggedinUser } from "../Utils/getLoggedInUser";

@@ -128,9 +128,7 @@ export default function UserBoard() {
         <ButtonHighlight
           onClick={() => {
             sessionStorage.setItem("previousUser", JSON.stringify(username));
-            // window.name = "";
             window.open(url);
-            // navigate("/");
           }}
         >
           Login a with another account
